@@ -1,16 +1,20 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "2MB" }));
 app.use(morgan("combined"));
 app.use(cors());
 
-app.post("/register", (req, res) => {
-  res.send({
-    message: `Hello ${req.body.email}!Your user was registered! Have fun`,
-  });
+let port = process.env.PORT || 8081;
+
+app.get("/", (req, res) => {
+  res.send("Entered");
 });
 
-app.listen(process.env.PORT || 8081);
+app.post("/", (req, res) => {
+  let allCountries = JSON.stringify(req.body);
+  res.send(`${allCountries}`);
+});
+
+app.listen(port, () => console.log(`Started on PORT ${port}`));

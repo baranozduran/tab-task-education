@@ -1,9 +1,12 @@
 <template>
-  <div id="nav">
-    <router-link :to="{ name: 'Home' }">Home</router-link>
-    <router-link :to="{ name: 'Register' }">Register</router-link>
+  <div id="main-container">
+    <div id="nav">
+      <router-link id="list" :to="{ name: 'PickACountry' }"
+        >COUNTRY LIST</router-link
+      >
+    </div>
+    <router-view />
   </div>
-  <router-view />
 </template>
 
 <style>
@@ -17,6 +20,7 @@
 
 #nav {
   padding: 30px;
+  position: relative;
 }
 
 #nav a {
@@ -30,5 +34,10 @@
 #nav a.router-link-exact-active {
   color: white;
   background-color: crimson;
+}
+#list {
+  text-align: left;
+  position: absolute;
+  left: 20px;
 }
 </style>

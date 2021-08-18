@@ -1,24 +1,58 @@
 <template>
   <div class="home">
-    <h1>Homepage</h1>
-    <p>
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusamus optio
-      totam labore illum eaque quam nostrum laudantium provident voluptate
-      voluptatum. Excepturi fugiat voluptatem, veniam quaerat consequatur libero
-      dignissimos doloremque corrupti beatae exercitationem nobis sed impedit
-      recusandae a nihil neque distinctio repudiandae facere ad velit laboriosam
-      quia debitis voluptatibus. Placeat eos quam, optio dolorem nam cum
-      consectetur, iure, reiciendis fugiat sunt delectus fugit officiis! Minima
-      impedit culpa, ullam libero sint adipisci autem incidunt veritatis
-      laborum! Mollitia, in. Adipisci soluta, ullam culpa atque ab, quam
-      suscipit debitis nobis eligendi dolores qui tmporibus earum iste. Itaque
-      optio, nam fuga mollitia natus veniam corporis?
-    </p>
+    <h1>Countries</h1>
+    <div id="main-container">
+      <Country
+        @clicked-to-country="clickedToCountry($event, country.name)"
+        v-bind:key="country.alpha2Code"
+        v-for="country in countriesInDatabase"
+        v-bind:countryName="country.name"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import postAll from "../services/postCountries";
+import Country from "../components/Country.vue";
+import { mapState, mapMutations } from "vuex";
+
 export default {
-  name: "Home",
+  name: "PickACountry",
+  components: {
+    Country,
+  },
+  data() {
+    return {
+      temporaryList: [],
+    };
+  },
+  methods: {
+    entered() {
+      return fetch("https://restcountries.eu/rest/v2/all").then((res) =>
+        res.json()
+      );
+    },
+    clickedToCountry(event, key) {
+      this.$router.push({
+        name: "CountryEntered",
+        params: { countryName: key },
+      });
+    },
+    ...mapMutations(["fillDatabase"]),
+  },
+  computed: { ...mapState(["countriesInDatabase"]) },
+  async mounted() {
+    let countries = await this.entered();
+    this.temporaryList = await postAll(countries);
+    this.fillDatabase(this.temporaryList);
+    console.log(this.temporaryList);
+  },
 };
 </script>
+<style scoped>
+#main-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>
