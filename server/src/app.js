@@ -17,4 +17,15 @@ app.post("/", (req, res) => {
   res.send(`${allCountries}`);
 });
 
+app.put("/", (req, res) => {
+  let newCountry = JSON.stringify(req.body);
+  console.log(`We have a PUT request with the country ${newCountry}`);
+  res.send(`${newCountry}`);
+});
+
+app.delete("/", (req, res) => {
+  let nameOfDeletedCountry = JSON.stringify(req.body);
+  res.send(`${nameOfDeletedCountry}`);
+});
+
 app.listen(port, () => console.log(`Started on PORT ${port}`));

@@ -1,5 +1,9 @@
 <template>
-  <button @click="$emit('clicked-to-country', $event)" id="container">
+  <button
+    @click="$emit('double-clicked-to-country', $event)"
+    @dblclick="$emit('clicked-to-country', $event)"
+    id="container"
+  >
     <p>{{ countryName }}</p>
   </button>
 </template>

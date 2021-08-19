@@ -13,6 +13,14 @@ const store = createStore({
     fillDatabase(state, payload) {
       state.countriesInDatabase = payload;
     },
+    addCountry(state, payload) {
+      state.countriesInDatabase.push(payload);
+    },
+    deleteCountryx(state, payload) {
+      state.countriesInDatabase = state.countriesInDatabase.filter(
+        (c) => c.name !== payload
+      );
+    },
   },
 });
 
