@@ -15,14 +15,14 @@
       <label for="c-population"> Population: </label>
       <input
         v-model="country.population"
-        type="text"
+        type="number"
         id="c-population"
         name="c-population"
       />
       <br />
       <label for="c-language"> Language: </label>
       <input
-        v-model="country.languages[0].name"
+        v-model="country.language"
         type="text"
         id="c-language"
         name="c-language"
@@ -30,7 +30,7 @@
       <br />
       <label for="c-cal-code"> Calling Code: </label>
       <input
-        v-model="country.callingCodes[0]"
+        v-model="country.callingCode"
         type="text"
         id="c-cal-code"
         name="c-cal-code"
@@ -53,10 +53,10 @@ export default {
       country: {
         name: "",
         capital: "",
-        population: "",
-        languages: [{ name: "" }],
-        callingCodes: [""],
-      },
+        population: 0,
+        language: "",
+        callingCode: ""
+      }
     };
   },
   methods: {
@@ -64,11 +64,11 @@ export default {
     async add() {
       let countryResponse = await axiosRequests.addCountry(this.country);
       this.addCountry(countryResponse);
-    },
+    }
   },
   computed: {
-    ...mapState(["countriesInDatabase"]),
-  },
+    ...mapState(["countriesInDatabase"])
+  }
 };
 </script>
 

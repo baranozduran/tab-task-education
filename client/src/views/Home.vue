@@ -7,7 +7,7 @@
         <Country
           @double-clicked-to-country="deleteCountry($event, country.name)"
           @clicked-to-country="clickedToCountry($event, country.name)"
-          v-bind:key="country.alpha2Code"
+          v-bind:key="country.callingCode"
           v-for="country in countriesInDatabase"
           v-bind:countryName="country.name"
         />
@@ -26,37 +26,48 @@ export default {
   name: "PickACountry",
   components: {
     Country,
-    CountryForm,
+    CountryForm
   },
   data() {
     return {
-      temporaryList: [],
+      temporaryList: []
     };
   },
   methods: {
     entered() {
-      return fetch("https://restcountries.eu/rest/v2/all").then((res) =>
+      return fetch("https://restcountries.eu/rest/v2/all").then(res =>
         res.json()
       );
     },
     clickedToCountry(event, key) {
       this.$router.push({
         name: "CountryEntered",
-        params: { countryName: key },
+        params: { countryName: key }
       });
     },
     ...mapMutations(["fillDatabase", "deleteCountryx"]),
     async deleteCountry(event, nameOfCountry) {
       let deletedCountryName = await axiosRequests.deleteCountry(nameOfCountry);
       this.deleteCountryx(deletedCountryName.countryName);
-    },
+    }
   },
   computed: { ...mapState(["countriesInDatabase"]) },
   async mounted() {
-    let countries = await this.entered();
-    this.temporaryList = await axiosRequests.postCountries(countries);
+    let oldCountries = await this.entered();
+    let shortCountries = new Array();
+    for (let i = 0; i < oldCountries.length; i++) {
+      shortCountries.push({
+        name: oldCountries[i].name,
+        capital: oldCountries[i].capital,
+        population: oldCountries[i].population,
+        language: oldCountries[i].languages[0].name,
+        callingCode: oldCountries[i].callingCodes[0]
+      });
+    }
+    let countriesObject = { countries: shortCountries };
+    this.temporaryList = await axiosRequests.postCountries(countriesObject);
     this.fillDatabase(this.temporaryList);
-  },
+  }
 };
 </script>
 <style scoped>

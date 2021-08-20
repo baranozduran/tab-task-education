@@ -3,8 +3,8 @@
     <p>Country Name: {{ countryName }}</p>
     <p>Capital: {{ country.capital }}</p>
     <p>Population: {{ country.population }}</p>
-    <p>Language: {{ countryLanguage }}</p>
-    <p>Calling Code: +{{ callingCode }}</p>
+    <p>Language: {{ country.language }}</p>
+    <p>Calling Code: +{{ country.callingCode }}</p>
   </div>
 </template>
 
@@ -18,24 +18,22 @@ export default {
       countryName: this.$route.params.countryName,
       country: Object,
       countryLanguage: String,
-      callingCode: String,
+      callingCode: String
     };
   },
   methods: {
     findTheCountry(countryName) {
       this.country = this.countriesInDatabase.filter(
-        (element) => element.name === countryName
+        element => element.name === countryName
       )[0];
-      this.countryLanguage = this.country.languages[0].name;
-      this.callingCode = this.country.callingCodes[0];
-    },
+    }
   },
   mounted() {
     this.findTheCountry(this.countryName);
   },
   computed: {
-    ...mapState(["countriesInDatabase"]),
-  },
+    ...mapState(["countriesInDatabase"])
+  }
 };
 </script>
 
